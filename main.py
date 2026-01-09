@@ -44,6 +44,70 @@ print(f"✅ Encabezados encontrados en la fila {header_row}")
 # 4. RELEER CON HEADER CORRECTO
 # ===============================
 df = pd.read_excel(archivo, sheet_name=hoja, header=header_row)
+# ===============================
+# FUNCIÓN ESTÁNDAR DE ESTILO PLOTLY
+# ===============================
+def estilo_grafica(fig, mostrar_leyenda=True):
+    fig.update_layout(
+        font=dict(size=40),
+        title=dict(font=dict(size=56)),
+        xaxis=dict(
+            title_font=dict(size=44),
+            tickfont=dict(size=36)
+        ),
+        yaxis=dict(
+            title_font=dict(size=44),
+            tickfont=dict(size=36)
+        ),
+        legend=dict(font=dict(size=36)),
+        bargap=0.3,
+        plot_bgcolor='white'
+    )
+
+    fig.update_traces(
+        textfont_size=18
+    )
+
+    fig.update_layout(showlegend=mostrar_leyenda)
+
+    return fig
+# ===============================
+# ESTILO GLOBAL MATPLOTLIB / SEABORN (XXL)
+# ===============================
+import matplotlib as mpl
+
+mpl.rcParams.update({
+
+    # Texto general
+    'font.size': 32,
+
+    # Títulos
+    'axes.titlesize': 48,
+    'axes.titleweight': 'bold',
+
+    # Etiquetas de ejes
+    'axes.labelsize': 40,
+
+    # Ticks
+    'xtick.labelsize': 32,
+    'ytick.labelsize': 32,
+
+    # Leyenda
+    'legend.fontsize': 32,
+    'legend.title_fontsize': 36,
+
+    # Figuras
+    'figure.titlesize': 52,
+    'figure.figsize': (12, 10),
+
+    # Líneas y bordes
+    'axes.linewidth': 1.5,
+
+    # Grid (si lo usas)
+    'grid.linewidth': 1
+})
+
+sns.set_context("talk")
 
 # ===============================
 # 5. LIMPIEZA DE COLUMNAS
@@ -153,8 +217,13 @@ fig = px.pie(
     color_discrete_sequence=PALETA_MORADO3
 )
 
-fig.update_traces(textposition='inside', textinfo='percent+label')
-fig.show()
+fig.update_traces(
+    textposition='inside',
+    textinfo='percent+label',
+    textfont_size=14
+)
+
+estilo_grafica(fig, mostrar_leyenda=True).show()
 
 
 # ===============================
@@ -179,11 +248,11 @@ fig = px.bar(
 
 fig.update_layout(
     barmode='stack',
-    xaxis_tickangle=-45,
-    plot_bgcolor='white'
+    xaxis_tickangle=-45
 )
 
-fig.show()
+estilo_grafica(fig).show()
+
 
 
 # ===============================
@@ -208,11 +277,11 @@ fig = px.bar(
 
 fig.update_layout(
     barmode='stack',
-    xaxis_tickangle=-45,
-    plot_bgcolor='white'
+    xaxis_tickangle=-45
 )
 
-fig.show()
+estilo_grafica(fig).show()
+
 
 ORDEN_BLANCOS = ["Trips", "Afidos"]
 
@@ -249,11 +318,10 @@ fig = px.bar(
 
 fig.update_layout(
     barmode='stack',
-    xaxis_tickangle=-45,
-    plot_bgcolor='white'
+    xaxis_tickangle=-45
 )
 
-fig.show()
+estilo_grafica(fig).show()
 
 
 
@@ -286,11 +354,11 @@ fig = px.bar(
 
 fig.update_layout(
     barmode='stack',
-    xaxis_tickangle=-45,
-    plot_bgcolor='white'
+    xaxis_tickangle=-45
 )
 
-fig.show()
+estilo_grafica(fig).show()
+
 
 
 print("✅ ANÁLISIS 2025 FINALIZADO – VISUALES EJECUTIVAS")
@@ -332,8 +400,8 @@ fig = px.bar(
     color_discrete_map=PALETA_MORADO
 )
 
-fig.update_layout(plot_bgcolor='white')
-fig.show()
+estilo_grafica(fig).show()
+
 
 def forzar_orden_blancos(df):
     df['blanco_norm'] = pd.Categorical(
@@ -378,11 +446,10 @@ fig = px.bar(
 
 fig.update_layout(
     barmode='stack',
-    xaxis_tickangle=-45,
-    plot_bgcolor='white'
+    xaxis_tickangle=-45
 )
 
-fig.show()
+estilo_grafica(fig).show()
 
 
 # ===============================
@@ -419,11 +486,11 @@ fig = px.bar(
 
 fig.update_layout(
     barmode='stack',
-    xaxis_tickangle=-45,
-    plot_bgcolor='white'
+    xaxis_tickangle=-45
 )
 
-fig.show()
+estilo_grafica(fig).show()
+
 
 # ===============================
 # 21. VARIACIÓN INTERANUAL (%)
@@ -482,11 +549,12 @@ sns.heatmap(
     annot=True,
     fmt='d',
     cmap='Reds',
-    linewidths=0.6,
-    cbar_kws={'label': 'Número de interceptaciones'}
+    linewidths=0.8,
+    cbar_kws={'label': 'Número de interceptaciones'},
+    annot_kws={"size": 30}
 )
 
-plt.title('Matriz de Riesgo Sanitario por Predio – Puerto de Salida 2025')
+plt.title('Matriz de Riesgo Sanitario por Predio – Puerto de Salida 2025', pad=20)
 plt.xlabel('Blanco Biológico')
 plt.ylabel('Predio')
 plt.tight_layout()
@@ -523,7 +591,7 @@ sns.barplot(
     palette=['#5E2B97', '#B39DDB']  # morado empresa
 )
 
-plt.title('Impacto de Interceptaciones en Tallos – Puerto de Salida 2025')
+plt.title('Impacto de Interceptaciones en Tallos – Puerto de Salida 2025', pad=20)
 plt.ylabel('Número de Tallos')
 plt.xlabel('')
 plt.ticklabel_format(style='plain', axis='y')
@@ -536,7 +604,8 @@ for index, row in impacto.iterrows():
         f"{row['tallos']:,}",
         ha='center',
         va='bottom',
-        fontweight='bold'
+        fontweight='bold',
+        fontsize=32
     )
 
 plt.tight_layout()
